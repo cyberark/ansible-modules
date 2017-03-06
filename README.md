@@ -28,15 +28,109 @@ Example Playbook
 ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 ```
 
-Example playbook showing how to include CyberArk modules in your playbook. 
+1) Example playbook showing the use of cyberark_authentication module for logon and logoff without using shared logon authentication. 
 
 ```
 ---
-- hosts: all 
-
+- hosts: localhost
+  
   roles:
+
     - role: cyberark_modules
+
+  tasks:
+
+    - name: Logon to CyberArk Vault using PAS Web Services SDK
+      cyberark_authentication:
+        api_base_url: "https://components.cyberark.local"
+        validate_certs: false
+        username: "testuser"
+        password: "Cyberark1"
+
+
+    - name: Debug message
+      debug: 
+        var: cyberark_session
+
+
+    - name: Logoff from CyberArk Vault
+      cyberark_authentication:
+        state: absent
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Debug message
+      debug: var=cyberark_session
 ```
+
+2) Example playbook using logon/logoff from cyberark_authentication module with shared logon authentication. Also the example shows the use of cyberark_user module to get user details, create user, reset credential, 
+```
+
+- hosts: all
+
+  tasks:
+
+    - name: Logon to CyberArk Vault using PAS Web Services SDK
+      cyberark_authentication:
+        api_base_url: "https://components.cyberark.local"
+        use_shared_logon_authentication: true
+
+    - name: Debug message
+      debug: 
+        var: cyberarkSession
+        
+    - name: Get Users Details
+      cyberark_user:
+        user_name: "testuser"
+        state: details
+        cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+      ignore_errors: yes
+      
+    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+      when: cyberarkaction.status_code == 200
+      
+    - name: Create User
+      cyberark_user:
+        user_name: "testuser"
+        initial_password: "Cyberark1"
+        user_type_name: "EPVUser"
+        change_password_on_the_next_logon: false
+        state: present
+        cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+      ignore_errors: yes
+      
+    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+      when: cyberarkaction.status_code == 201
+      
+    - name: Reset user credential
+      cyberark_user:
+        user_name: "testuser"
+        new_password: "Cyberark1"
+        disabled: false
+        state: update
+        cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+      ignore_errors: yes
+      
+    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+      when: cyberarkaction.status_code == 200
+
+    - name: Remove  User
+      cyberark_user: 
+        username: "testuser" 
+        state: absent 
+        cyberark_session: "{{ cyberark_session }}"
+        
+    - name: Logoff from CyberArk Vault
+      cyberark_authentication:
+        state: absent
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Debug message
+      debug: var=cyberarkSession      
+```
+
 
 License
 -------
