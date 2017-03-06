@@ -1,6 +1,6 @@
 galaxy_info:
   author: Edward Nunez
-  description: CyberArk Ansible Modules: Authentication, User
+  description: CyberArk Ansible Modules Authentication, User
   company: CyberArk
 
   license: MIT
