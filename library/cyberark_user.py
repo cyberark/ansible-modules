@@ -221,7 +221,7 @@ def userAddOrUpdate(module, HTTPMethod):
     # for PUT -- update -- username is part of the endpoint
     if HTTPMethod == "POST":
         end_point = "/PasswordVault/WebServices/PIMServices.svc/Users"
-        payload["username"] = username
+        payload["UserName"] = username
     elif HTTPMethod == "PUT":
         end_point = "/PasswordVault/WebServices/PIMServices.svc/Users/{0}"
         end_point = end_point.format(username)
