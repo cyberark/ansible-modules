@@ -82,7 +82,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Debug message
       debug:
-        var: cyberarkSession
+        var: cyberark_session
 
     - name: Get Users Details
       cyberark_user:
@@ -100,7 +100,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession
+      debug: var=cyberark_session
 ```
 
 
@@ -123,7 +123,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Debug message
       debug:
-        var: cyberarkSession
+        var: cyberark_session
 
     - name: Create User
       cyberark_user:
@@ -144,7 +144,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession
+      debug: var=cyberark_session
 ```
 
 
@@ -167,7 +167,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Debug message
       debug:
-        var: cyberarkSession
+        var: cyberark_session
 
     - name: Get Users Details
       cyberark_user:
@@ -197,7 +197,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession
+      debug: var=cyberark_session
 ```
 
 
@@ -220,7 +220,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Debug message
       debug:
-        var: cyberarkSession
+        var: cyberark_session
 
     - name: Remove  User
       cyberark_user:
@@ -234,7 +234,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession
+      debug: var=cyberark_session
 ```
 
 License

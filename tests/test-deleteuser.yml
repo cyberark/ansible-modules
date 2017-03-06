@@ -15,7 +15,7 @@
 
     - name: Debug message
       debug: 
-        var: cyberarkSession
+        var: cyberark_session
         
     - name: Remove  User
       cyberark_user: 
@@ -29,4 +29,4 @@
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession      
+      debug: var=cyberark_session      

@@ -15,7 +15,7 @@
 
     - name: Debug message
       debug: 
-        var: cyberarkSession
+        var: cyberark_session
         
     - name: Get Users Details
       cyberark_user:
@@ -33,4 +33,4 @@
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession      
+      debug: var=cyberark_session
