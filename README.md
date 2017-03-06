@@ -127,7 +127,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Create User
       cyberark_user:
-        username: "testuser"
+        username: "testuser2"
         initial_password: "Cyberark1"
         user_type_name: "EPVUser"
         change_password_on_the_next_logon: false
@@ -224,7 +224,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Remove  User
       cyberark_user:
-        username: "testuser"
+        username: "testuser2"
         state: absent
         cyberark_session: "{{ cyberark_session }}"
 

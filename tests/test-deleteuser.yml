@@ -19,7 +19,7 @@
         
     - name: Remove  User
       cyberark_user: 
-        username: "testuser" 
+        username: "testuser2" 
         state: absent 
         cyberark_session: "{{ cyberark_session }}"
         
