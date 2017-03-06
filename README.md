@@ -28,12 +28,12 @@ Example Playbook
 ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 ```
 
-1) Example playbook showing the use of cyberark_authentication module for logon and logoff without using shared logon authentication. 
+1) Example playbook showing the use of cyberark_authentication module for logon and logoff without using shared logon authentication.
 
 ```
 ---
 - hosts: localhost
-  
+
   roles:
 
     - role: cyberark_modules
@@ -49,7 +49,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
 
     - name: Debug message
-      debug: 
+      debug:
         var: cyberark_session
 
 
@@ -66,7 +66,11 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 2) Example playbook showing the use of cyberark_user module to get user details.
 ```
 ---
-- hosts: all
+- hosts: localhost
+
+  roles:
+
+    - role: cyberark_modules
 
   tasks:
 
@@ -76,33 +80,37 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         use_shared_logon_authentication: true
 
     - name: Debug message
-      debug: 
+      debug:
         var: cyberarkSession
-        
+
     - name: Get Users Details
       cyberark_user:
         user_name: "testuser"
         state: details
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
-      
+
     - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
       when: cyberarkaction.status_code == 200
-              
+
     - name: Logoff from CyberArk Vault
       cyberark_authentication:
         state: absent
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession      
+      debug: var=cyberarkSession
 ```
 
 
 3) Example playbook showing the use of cyberark_user module to create a user.
 ```
 ---
-- hosts: all
+- hosts: localhost
+
+  roles:
+
+    - role: cyberark_modules
 
   tasks:
 
@@ -112,9 +120,9 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         use_shared_logon_authentication: true
 
     - name: Debug message
-      debug: 
+      debug:
         var: cyberarkSession
-        
+
     - name: Create User
       cyberark_user:
         user_name: "testuser"
@@ -124,10 +132,10 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         state: present
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
-      
+
     - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
       when: cyberarkaction.status_code == 201
-              
+
     - name: Logoff from CyberArk Vault
       cyberark_authentication:
         state: absent
@@ -141,7 +149,11 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 4) Example playbook showing the use of cyberark_user module to reset's a user credential.
 ```
 ---
-- hosts: all
+- hosts: localhost
+
+  roles:
+
+    - role: cyberark_modules
 
   tasks:
 
@@ -151,9 +163,19 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         use_shared_logon_authentication: true
 
     - name: Debug message
-      debug: 
+      debug:
         var: cyberarkSession
-        
+
+    - name: Get Users Details
+      cyberark_user:
+        user_name: "testuser"
+        state: details
+        cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+
+    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+      when: cyberarkaction.status_code == 200
+
     - name: Reset user credential
       cyberark_user:
         user_name: "testuser"
@@ -162,7 +184,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         state: update
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
-      
+
     - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
       when: cyberarkaction.status_code == 200
 
@@ -179,7 +201,11 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 5) Example playbook showing the use of cyberark_user module to delete a user.
 ```
 ---
-- hosts: all
+- hosts: localhost
+
+  roles:
+
+    - role: cyberark_modules
 
   tasks:
 
@@ -189,22 +215,22 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         use_shared_logon_authentication: true
 
     - name: Debug message
-      debug: 
+      debug:
         var: cyberarkSession
-        
+
     - name: Remove  User
-      cyberark_user: 
-        username: "testuser" 
-        state: absent 
+      cyberark_user:
+        username: "testuser"
+        state: absent
         cyberark_session: "{{ cyberark_session }}"
-        
+
     - name: Logoff from CyberArk Vault
       cyberark_authentication:
         state: absent
         cyberark_session: "{{ cyberark_session }}"
 
     - name: Debug message
-      debug: var=cyberarkSession      
+      debug: var=cyberarkSession
 ```
 
 License
