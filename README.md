@@ -91,7 +91,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
 
-    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+    - debug: msg="{{cyberarkaction.cyberark_user.result}}"
       when: cyberarkaction.status_code == 200
 
     - name: Logoff from CyberArk Vault
@@ -135,7 +135,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
 
-    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+    - debug: msg="{{cyberarkaction.cyberark_user.result}}"
       when: cyberarkaction.status_code == 201
 
     - name: Logoff from CyberArk Vault
@@ -176,7 +176,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
 
-    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+    - debug: msg="{{cyberarkaction.cyberark_user.result}}"
       when: cyberarkaction.status_code == 200
 
     - name: Reset user credential
@@ -188,7 +188,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
 
-    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+    - debug: msg="{{cyberarkaction.cyberark_user.result}}"
       when: cyberarkaction.status_code == 200
 
     - name: Logoff from CyberArk Vault

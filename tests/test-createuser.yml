@@ -27,7 +27,7 @@
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
       
-    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+    - debug: msg="{{cyberarkaction.cyberark_user.result}}"
       when: cyberarkaction.status_code == 201
               
     - name: Logoff from CyberArk Vault
