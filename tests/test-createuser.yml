@@ -1,0 +1,34 @@
+---
+- hosts: all
+
+  tasks:
+
+    - name: Logon to CyberArk Vault using PAS Web Services SDK
+      cyberark_authentication:
+        api_base_url: "https://components.cyberark.local"
+        use_shared_logon_authentication: true
+
+    - name: Debug message
+      debug: 
+        var: cyberarkSession
+        
+    - name: Create User
+      cyberark_user:
+        user_name: "testuser"
+        initial_password: "Cyberark1"
+        user_type_name: "EPVUser"
+        change_password_on_the_next_logon: false
+        state: present
+        cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+      
+    - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
+      when: cyberarkaction.status_code == 201
+              
+    - name: Logoff from CyberArk Vault
+      cyberark_authentication:
+        state: absent
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Debug message
+      debug: var=cyberarkSession      

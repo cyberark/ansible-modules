@@ -62,9 +62,10 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
       debug: var=cyberark_session
 ```
 
-2) Example playbook using logon/logoff from cyberark_authentication module with shared logon authentication. Also the example shows the use of cyberark_user module to get user details, create user, reset credential, 
-```
 
+2) Example playbook showing the use of cyberark_user module to get user details.
+```
+---
 - hosts: all
 
   tasks:
@@ -84,11 +85,36 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         state: details
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
-      ignore_errors: yes
       
     - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
       when: cyberarkaction.status_code == 200
-      
+              
+    - name: Logoff from CyberArk Vault
+      cyberark_authentication:
+        state: absent
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Debug message
+      debug: var=cyberarkSession      
+```
+
+
+3) Example playbook showing the use of cyberark_user module to create a user.
+```
+---
+- hosts: all
+
+  tasks:
+
+    - name: Logon to CyberArk Vault using PAS Web Services SDK
+      cyberark_authentication:
+        api_base_url: "https://components.cyberark.local"
+        use_shared_logon_authentication: true
+
+    - name: Debug message
+      debug: 
+        var: cyberarkSession
+        
     - name: Create User
       cyberark_user:
         user_name: "testuser"
@@ -98,11 +124,36 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         state: present
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
-      ignore_errors: yes
       
     - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
       when: cyberarkaction.status_code == 201
-      
+              
+    - name: Logoff from CyberArk Vault
+      cyberark_authentication:
+        state: absent
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Debug message
+      debug: var=cyberarkSession
+```
+
+
+4) Example playbook showing the use of cyberark_user module to reset's a user credential.
+```
+---
+- hosts: all
+
+  tasks:
+
+    - name: Logon to CyberArk Vault using PAS Web Services SDK
+      cyberark_authentication:
+        api_base_url: "https://components.cyberark.local"
+        use_shared_logon_authentication: true
+
+    - name: Debug message
+      debug: 
+        var: cyberarkSession
+        
     - name: Reset user credential
       cyberark_user:
         user_name: "testuser"
@@ -111,11 +162,36 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
         state: update
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
-      ignore_errors: yes
       
     - debug: msg="{{cyberarkaction.cyberarkUser.result}}"
       when: cyberarkaction.status_code == 200
 
+    - name: Logoff from CyberArk Vault
+      cyberark_authentication:
+        state: absent
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Debug message
+      debug: var=cyberarkSession
+```
+
+
+5) Example playbook showing the use of cyberark_user module to delete a user.
+```
+---
+- hosts: all
+
+  tasks:
+
+    - name: Logon to CyberArk Vault using PAS Web Services SDK
+      cyberark_authentication:
+        api_base_url: "https://components.cyberark.local"
+        use_shared_logon_authentication: true
+
+    - name: Debug message
+      debug: 
+        var: cyberarkSession
+        
     - name: Remove  User
       cyberark_user: 
         username: "testuser" 
@@ -130,7 +206,6 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
     - name: Debug message
       debug: var=cyberarkSession      
 ```
-
 
 License
 -------
