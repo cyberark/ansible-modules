@@ -19,7 +19,7 @@
         
     - name: Get Users Details
       cyberark_user:
-        user_name: "testuser"
+        username: "testuser"
         state: details
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction

@@ -86,7 +86,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Get Users Details
       cyberark_user:
-        user_name: "testuser"
+        username: "testuser"
         state: details
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
@@ -127,7 +127,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Create User
       cyberark_user:
-        user_name: "testuser"
+        username: "testuser"
         initial_password: "Cyberark1"
         user_type_name: "EPVUser"
         change_password_on_the_next_logon: false
@@ -171,7 +171,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Get Users Details
       cyberark_user:
-        user_name: "testuser"
+        username: "testuser"
         state: details
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
@@ -181,7 +181,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
     - name: Reset user credential
       cyberark_user:
-        user_name: "testuser"
+        username: "testuser"
         new_password: "Cyberark1"
         disabled: false
         state: update
