@@ -186,7 +186,7 @@ def userDetails(module):
             validate_certs=validate_certs)
         result = {"result": json.loads(response.read())}
 
-        return (True, result, response.getcode())
+        return (False, result, response.getcode())
 
     except Exception:
 
