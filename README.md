@@ -23,6 +23,11 @@ Provided Modules
 Example Playbook
 ----------------
 
+**Note**: As the role will include the galaxy user, you can create a symbolic link as follows:
+```
+ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
+```
+
 Example playbook showing how to include CyberArk modules in your playbook. 
 
 ```
@@ -30,7 +35,7 @@ Example playbook showing how to include CyberArk modules in your playbook.
 - hosts: all 
 
   roles:
-    - role: {enunez-cyberark.cyberark_modules}
+    - role: cyberark_modules
 ```
 
 License

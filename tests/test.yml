@@ -1,5 +1,7 @@
 ---
 - hosts: localhost
   remote_user: root
+  
   roles:
+
     - role: cyberark_modules
