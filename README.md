@@ -77,6 +77,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
     - name: Logon to CyberArk Vault using PAS Web Services SDK
       cyberark_authentication:
         api_base_url: "https://components.cyberark.local"
+        validate_certs: false
         use_shared_logon_authentication: true
 
     - name: Debug message
@@ -117,6 +118,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
     - name: Logon to CyberArk Vault using PAS Web Services SDK
       cyberark_authentication:
         api_base_url: "https://components.cyberark.local"
+        validate_certs: false
         use_shared_logon_authentication: true
 
     - name: Debug message
@@ -160,6 +162,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
     - name: Logon to CyberArk Vault using PAS Web Services SDK
       cyberark_authentication:
         api_base_url: "https://components.cyberark.local"
+        validate_certs: false
         use_shared_logon_authentication: true
 
     - name: Debug message
@@ -212,6 +215,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
     - name: Logon to CyberArk Vault using PAS Web Services SDK
       cyberark_authentication:
         api_base_url: "https://components.cyberark.local"
+        validate_certs: false
         use_shared_logon_authentication: true
 
     - name: Debug message
