@@ -43,11 +43,12 @@ options:
             - The name of the user who will be queried (for details), added, updated or deleted.
     state:
         default: details
-        choices: ['details', 'present', 'update', 'absent']
+        choices: ['details', 'present', 'update', 'addtogroup', absent']
         description:
-            - Specifies the state (defining the action to follow) needed for the user.
+            - Specifies the state (defining the action to follow) needed for the user
               'details' for query user details, 'present' for create user,
-              'update' for update user (even the password), 'delete' for delete user.
+              'update' for update user (even the password), 'addtogroup' to add user to a group, 
+              'absent' for delete user.
     cyberark_session:
         required: True
         description:
@@ -87,6 +88,9 @@ options:
     location:
         description:
             - The Vault Location for the user.
+    group_name:
+        description:
+            - The name of the group the user will be added to, this parameter is required when state is 'addtogroup' otherwise ignored.
 '''
 
 EXAMPLES = '''
@@ -108,6 +112,13 @@ EXAMPLES = '''
     user_type_name: "EPVUser"
     change_password_on_the_next_logon: false
     state: present
+    cyberark_session: "{{ cyberark_session }}"
+
+- name: Add User to Group "GroupOfUsers"
+  cyberark_user:
+    username: "username"
+    group_name: "GroupOfUsers"
+    state: addtogroup
     cyberark_session: "{{ cyberark_session }}"
 
 - name: Reset user credential
@@ -329,12 +340,57 @@ def userDelete(module):
             status_code=e.code)
 
 
+def userAddToGroup(module):
+
+    # Get username, and groupname from module parameters, and api base url
+    # along with validate_certs from the cyberark_session established
+    username = module.params["username"]
+    group_name = module.params["group_name"]
+    cyberark_session = module.params["cyberark_session"]
+    api_base_url = cyberark_session["api_base_url"]
+    validate_certs = cyberark_session["validate_certs"]
+
+    if module.check_mode:
+        # return if case of check_mode
+        module.exit_json(change=False)
+
+    # Prepare result, end_point, headers and payload
+    result = {}
+    end_point = "/PasswordVault/WebServices/PIMServices.svc//Groups/{0}/Users".format(
+        group_name)
+
+    headers = {'Content-Type': 'application/json'}
+    headers["Authorization"] = cyberark_session["token"]
+    payload = {"UserName": username}
+
+    try:
+
+        response = open_url(
+            api_base_url + end_point,
+            method="POST",
+            headers=headers,
+            data=json.dumps(payload),
+            validate_certs=validate_certs)
+
+        result = {"result": {}}
+
+        return (True, result, response.getcode())
+
+    except Exception:
+
+        t, e = sys.exc_info()[:2]
+        module.fail_json(
+            msg=str(e),
+            exception=traceback.format_exc(),
+            status_code=e.code)
+
+
 def main():
 
     fields = {
         "username": {"required": True, "type": "str"},
         "state": {"type": "str",
-                  "choices": ["details", "present", "update", "absent"],
+                  "choices": ["details", "present", "update", "addtogroup", "absent"],
                   "default": "details"},
         "cyberark_session": {"required": True, "type": "dict"},
         "initial_password": {"type": "str"},
@@ -347,10 +403,12 @@ def main():
         "user_type_name": {"type": "str"},
         "disabled": {"type": "bool"},
         "location": {"type": "str"},
+        "group_name": {"type": "str"},
     }
 
     required_if = [
         ("state", "present", ["initial_password"]),
+        ("state", "addtogroup", ["group_name"]),
     ]
 
     module = AnsibleModule(argument_spec=fields, required_if=required_if)
@@ -366,6 +424,8 @@ def main():
         (changed, result, status_code) = userAddOrUpdate(module, "POST")
     elif (state == "update"):
         (changed, result, status_code) = userAddOrUpdate(module, "PUT")
+    elif (state == "addtogroup"):
+        (changed, result, status_code) = userAddToGroup(module)
     elif (state == "absent"):
         (changed, result, status_code) = userDelete(module)
 

@@ -201,7 +201,45 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 ```
 
 
-5) Example playbook showing the use of cyberark_user module to delete a user.
+5) Example playbook showing the use of cyberark_user module to add user to a group.
+```
+---
+- hosts: localhost
+
+  roles:
+
+    - role: cyberark_modules
+
+  tasks:
+
+    - name: Logon to CyberArk Vault using PAS Web Services SDK
+      cyberark_authentication:
+        api_base_url: "https://components.cyberark.local"
+        validate_certs: false
+        use_shared_logon_authentication: true
+
+    - name: Debug message
+      debug:
+        var: cyberark_session
+
+    - name: Add User to Group
+      cyberark_user:
+        username: "testuser"
+        group_name: "TestGroup"
+        state: addtogroup
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Logoff from CyberArk Vault
+      cyberark_authentication:
+        state: absent
+        cyberark_session: "{{ cyberark_session }}"
+
+    - name: Debug message
+      debug: var=cyberark_session
+```
+
+
+6) Example playbook showing the use of cyberark_user module to delete a user.
 ```
 ---
 - hosts: localhost
