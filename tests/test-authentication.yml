@@ -3,7 +3,7 @@
   
   roles:
 
-    - role: cyberark_modules
+    - role: cyberark-bizdev.modules
 
   tasks:
 

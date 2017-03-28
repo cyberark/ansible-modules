@@ -23,11 +23,6 @@ Provided Modules
 Example Playbook
 ----------------
 
-**Note**: As the role will include the galaxy user, you can create a symbolic link as follows:
-```
-ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
-```
-
 1) Example playbook showing the use of cyberark_authentication module for logon and logoff without using shared logon authentication.
 
 ```
@@ -36,7 +31,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
   roles:
 
-    - role: cyberark_modules
+    - role: cyberark-bizdev.modules
 
   tasks:
 
@@ -70,7 +65,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
   roles:
 
-    - role: cyberark_modules
+    - role: cyberark-bizdev.modules
 
   tasks:
 
@@ -111,7 +106,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
   roles:
 
-    - role: cyberark_modules
+    - role: cyberark-bizdev.modules
 
   tasks:
 
@@ -155,7 +150,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
   roles:
 
-    - role: cyberark_modules
+    - role: cyberark-bizdev.modules
 
   tasks:
 
@@ -208,7 +203,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
   roles:
 
-    - role: cyberark_modules
+    - role: cyberark-bizdev.modules
 
   tasks:
 
@@ -246,7 +241,7 @@ ln -s /etc/ansible/roles/enunez-cyberark.cyberark_modules cyberark_modules
 
   roles:
 
-    - role: cyberark_modules
+    - role: cyberark-bizdev.modules
 
   tasks:
 
