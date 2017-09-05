@@ -31,14 +31,14 @@ Example Playbook
 
   roles:
 
-    - role: cyberark-bizdev.modules
+    - role: cyberark.modules
 
   tasks:
 
     - name: Logon to CyberArk Vault using PAS Web Services SDK
       cyberark_authentication:
         api_base_url: "https://components.cyberark.local"
-        validate_certs: false
+        validate_certs: no
         username: "testuser"
         password: "Cyberark1"
 
@@ -58,55 +58,14 @@ Example Playbook
 ```
 
 
-2) Example playbook showing the use of cyberark_user module to get user details.
+2) Example playbook showing the use of cyberark_user module to create a user.
 ```
 ---
 - hosts: localhost
 
   roles:
 
-    - role: cyberark-bizdev.modules
-
-  tasks:
-
-    - name: Logon to CyberArk Vault using PAS Web Services SDK
-      cyberark_authentication:
-        api_base_url: "https://components.cyberark.local"
-        validate_certs: false
-        use_shared_logon_authentication: true
-
-    - name: Debug message
-      debug:
-        var: cyberark_session
-
-    - name: Get Users Details
-      cyberark_user:
-        username: "testuser"
-        state: details
-        cyberark_session: "{{ cyberark_session }}"
-      register: cyberarkaction
-
-    - debug: msg="{{cyberarkaction.cyberark_user.result}}"
-      when: cyberarkaction.status_code == 200
-
-    - name: Logoff from CyberArk Vault
-      cyberark_authentication:
-        state: absent
-        cyberark_session: "{{ cyberark_session }}"
-
-    - name: Debug message
-      debug: var=cyberark_session
-```
-
-
-3) Example playbook showing the use of cyberark_user module to create a user.
-```
----
-- hosts: localhost
-
-  roles:
-
-    - role: cyberark-bizdev.modules
+    - role: cyberark.modules
 
   tasks:
 
@@ -126,6 +85,7 @@ Example Playbook
         initial_password: "Cyberark1"
         user_type_name: "EPVUser"
         change_password_on_the_next_logon: false
+        group_name: "TestGroup"
         state: present
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
@@ -143,14 +103,14 @@ Example Playbook
 ```
 
 
-4) Example playbook showing the use of cyberark_user module to reset's a user credential.
+3) Example playbook showing the use of cyberark_user module to reset's a user credential.
 ```
 ---
 - hosts: localhost
 
   roles:
 
-    - role: cyberark-bizdev.modules
+    - role: cyberark.modules
 
   tasks:
 
@@ -163,23 +123,13 @@ Example Playbook
     - name: Debug message
       debug:
         var: cyberark_session
-
-    - name: Get Users Details
-      cyberark_user:
-        username: "testuser"
-        state: details
-        cyberark_session: "{{ cyberark_session }}"
-      register: cyberarkaction
-
-    - debug: msg="{{cyberarkaction.cyberark_user.result}}"
-      when: cyberarkaction.status_code == 200
 
     - name: Reset user credential
       cyberark_user:
-        username: "testuser"
-        new_password: "Cyberark1"
+        username: "testuser2"
+        new_password: "Cyberark123"
         disabled: false
-        state: update
+        state: present
         cyberark_session: "{{ cyberark_session }}"
       register: cyberarkaction
 
@@ -196,14 +146,14 @@ Example Playbook
 ```
 
 
-5) Example playbook showing the use of cyberark_user module to add user to a group.
+4) Example playbook showing the use of cyberark_user module to add user to a group (only during creation).
 ```
 ---
 - hosts: localhost
 
   roles:
 
-    - role: cyberark-bizdev.modules
+    - role: cyberark.modules
 
   tasks:
 
@@ -217,12 +167,16 @@ Example Playbook
       debug:
         var: cyberark_session
 
-    - name: Add User to Group
+    - name: Add user to group
       cyberark_user:
-        username: "testuser"
+        username: "testuser2"
+        initial_password: "Cyberark1"
         group_name: "TestGroup"
-        state: addtogroup
+        state: present
         cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+
+    - debug: msg="{{cyberarkaction}}"
 
     - name: Logoff from CyberArk Vault
       cyberark_authentication:
@@ -234,14 +188,14 @@ Example Playbook
 ```
 
 
-6) Example playbook showing the use of cyberark_user module to delete a user.
+5) Example playbook showing the use of cyberark_user module to delete a user.
 ```
 ---
 - hosts: localhost
 
   roles:
 
-    - role: cyberark-bizdev.modules
+    - role: cyberark.modules
 
   tasks:
 
@@ -260,6 +214,9 @@ Example Playbook
         username: "testuser2"
         state: absent
         cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+
+    - debug: msg="{{cyberarkaction}}"
 
     - name: Logoff from CyberArk Vault
       cyberark_authentication:
@@ -273,7 +230,7 @@ Example Playbook
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------

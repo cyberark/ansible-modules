@@ -19,10 +19,14 @@
         
     - name: Add user to group
       cyberark_user: 
-        username: "testuser"
+        username: "testuser2"
+        initial_password: "Cyberark1"
         group_name: "TestGroup" 
-        state: addtogroup
+        state: present
         cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+
+    - debug: msg="{{cyberarkaction}}"
         
     - name: Logoff from CyberArk Vault
       cyberark_authentication:

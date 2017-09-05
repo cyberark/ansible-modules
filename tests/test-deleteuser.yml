@@ -22,6 +22,9 @@
         username: "testuser2" 
         state: absent 
         cyberark_session: "{{ cyberark_session }}"
+      register: cyberarkaction
+
+    - debug: msg="{{cyberarkaction}}"
         
     - name: Logoff from CyberArk Vault
       cyberark_authentication:
