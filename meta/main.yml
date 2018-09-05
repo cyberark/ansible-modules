@@ -1,6 +1,6 @@
 galaxy_info:
-  author: Edward Nunez
-  description: CyberArk Ansible Modules for Authentication, User Management.
+  author: Business Development Technical Team
+  description: CyberArk Ansible Modules for Authentication, User Management, and Credential Retrieval using AIM Central Credential Provider's REST API.
   company: CyberArk
 
   license: MIT
@@ -42,11 +42,12 @@ galaxy_info:
     versions:
     - all
 
-  galaxy_tags: 
+  galaxy_tags:
   - identity
   - password
   - privileged
   - vault
   - cyberark
+  - AIM
 
 dependencies: []

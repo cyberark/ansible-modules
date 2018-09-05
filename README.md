@@ -7,6 +7,7 @@ Requirements
 ------------
 
 - CyberArk Privileged Account Security Web Services SDK.
+- CyberArk AIM Central Credential Provider
 
 Role Variables
 --------------
@@ -18,6 +19,7 @@ Provided Modules
 
 - **cyberark_authentication**: Module for CyberArk Vault Authentication using Privileged Account Security Web Services SDK
 - **cyberark_user**: Module for CyberArk User Management using Privileged Account Security Web Services SDK
+- **cyberark_credential**: Module for CyberArk credential retrieval using Cyberark Central Credential Provider
 
 
 Example Playbook
@@ -227,6 +229,63 @@ Example Playbook
       debug: var=cyberark_session
 ```
 
+
+6) Example of a basic playbook showing the minimum needed to use the cyberark_credential module for retrieval of credentials using the Central Credential Provider.
+```
+---
+- hosts: localhost
+
+  roles:
+
+- role: cyberark.modules
+
+  tasks:
+
+- name: credential retrieval basic
+    cyberark_credential:
+  api_base_url: "http://10.10.0.1"
+  app_id: "TestID"
+  query: "Safe=test;UserName=admin"
+    register: {{ result }}
+
+
+  - name: Debug message
+    debug: 
+  var: {{ result }}
+```
+
+
+7) Example of a more advanced playbook outlining the use of all of the parameters available when using the cyberark_credential module for retrieval of credentials using the Central Credential Provider.
+```
+---
+- hosts: localhost
+    
+  roles:
+
+- role: cyberark-bizdev.modules
+
+  tasks:
+
+- name: credential retrieval advanced
+    cyberark_credential:
+  api_base_url: "https://components.cyberark.local"
+  validate_certs: yes
+  client_cert: /etc/pki/ca-trust/source/client.pem
+  client_key: /etc/pki/ca-trust/source/priv-key.pem
+  app_id: "TestID"
+  query: "Safe=test;UserName=admin"
+  connection_timeout: 60
+  query_format: Exact
+  fail_request_on_password_change: True
+  reason: "requesting credential for Ansible deployment"
+    register: {{ result }}
+
+
+  - name: Debug message
+    debug: 
+  var: {{ result }}
+```
+
 License
 -------
 
@@ -235,4 +294,4 @@ MIT
 Author Information
 ------------------
 
-- Edward Nunez (edward.nunez@cyberark.com)
+- Cyberark Business Developement Technical Team (BizDevTech@cyberark.com)
