@@ -27,7 +27,7 @@ Example Playbook
 
 1) Example playbook showing the use of cyberark_authentication module for logon and logoff without using shared logon authentication.
 
-```
+```yaml
 ---
 - hosts: localhost
 
@@ -61,7 +61,7 @@ Example Playbook
 
 
 2) Example playbook showing the use of cyberark_user module to create a user.
-```
+```yaml
 ---
 - hosts: localhost
 
@@ -106,7 +106,7 @@ Example Playbook
 
 
 3) Example playbook showing the use of cyberark_user module to reset's a user credential.
-```
+```yaml
 ---
 - hosts: localhost
 
@@ -149,7 +149,7 @@ Example Playbook
 
 
 4) Example playbook showing the use of cyberark_user module to add user to a group (only during creation).
-```
+```yaml
 ---
 - hosts: localhost
 
@@ -191,7 +191,7 @@ Example Playbook
 
 
 5) Example playbook showing the use of cyberark_user module to delete a user.
-```
+```yaml
 ---
 - hosts: localhost
 
@@ -231,7 +231,7 @@ Example Playbook
 
 
 6) Example of a basic playbook showing the minimum needed to use the cyberark_credential module for retrieval of credentials using the Central Credential Provider.
-```
+```yaml
 ---
 - hosts: localhost
 
@@ -256,7 +256,7 @@ Example Playbook
 
 
 7) Example of a more advanced playbook outlining the use of all of the parameters available when using the cyberark_credential module for retrieval of credentials using the Central Credential Provider.
-```
+```yaml
 ---
 - hosts: localhost
     
