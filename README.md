@@ -19,7 +19,9 @@ Provided Modules
 
 - **cyberark_authentication**: Module for CyberArk Vault Authentication using Privileged Account Security Web Services SDK
 - **cyberark_user**: Module for CyberArk User Management using Privileged Account Security Web Services SDK
-- **cyberark_credential**: Module for CyberArk credential retrieval using Cyberark Central Credential Provider
+- **cyberark_credential**: Module for CyberArk credential retrieval using Cyberark Central Credential Provider. 
+ 
+**NOTE**: For access to the cyberark_credential functionality, the **library/cyberark_credential.py** file will need to be added to the Ansible modules directory of the Ansible server.
 
 
 Example Playbook
@@ -235,23 +237,20 @@ Example Playbook
 ---
 - hosts: localhost
 
-  roles:
-
-- role: cyberark.modules
-
   tasks:
 
-- name: credential retrieval basic
+  - name: credential retrieval basic
     cyberark_credential:
-  api_base_url: "http://10.10.0.1"
-  app_id: "TestID"
-  query: "Safe=test;UserName=admin"
+      api_base_url: "http://10.10.0.1"
+      app_id: "TestID"
+      query: "Safe=test;UserName=admin"
     register: {{ result }}
+    no_log: true
 
 
   - name: Debug message
     debug: 
-  var: {{ result }}
+      var: {{ result }}
 ```
 
 
@@ -260,30 +259,27 @@ Example Playbook
 ---
 - hosts: localhost
     
-  roles:
-
-- role: cyberark-bizdev.modules
-
   tasks:
 
-- name: credential retrieval advanced
+  - name: credential retrieval advanced
     cyberark_credential:
-  api_base_url: "https://components.cyberark.local"
-  validate_certs: yes
-  client_cert: /etc/pki/ca-trust/source/client.pem
-  client_key: /etc/pki/ca-trust/source/priv-key.pem
-  app_id: "TestID"
-  query: "Safe=test;UserName=admin"
-  connection_timeout: 60
-  query_format: Exact
-  fail_request_on_password_change: True
-  reason: "requesting credential for Ansible deployment"
+      api_base_url: "https://components.cyberark.local"
+      validate_certs: yes
+      client_cert: /etc/pki/ca-trust/source/client.pem
+      client_key: /etc/pki/ca-trust/source/priv-key.pem
+      app_id: "TestID"
+      query: "Safe=test;UserName=admin"
+      connection_timeout: 60
+      query_format: Exact
+      fail_request_on_password_change: True
+      reason: "requesting credential for Ansible deployment"
     register: {{ result }}
+    no_log: true
 
 
   - name: Debug message
     debug: 
-  var: {{ result }}
+      var: {{ result }}
 ```
 
 License
