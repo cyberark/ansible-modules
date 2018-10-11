@@ -239,18 +239,18 @@ Example Playbook
 
   tasks:
 
-  - name: credential retrieval basic
-    cyberark_credential:
-      api_base_url: "http://10.10.0.1"
-      app_id: "TestID"
-      query: "Safe=test;UserName=admin"
-    register: {{ result }}
-    no_log: true
+    - name: credential retrieval basic
+      cyberark_credential:
+        api_base_url: "http://10.10.0.1"
+        app_id: "TestID"
+        query: "Safe=test;UserName=admin"
+      register: {{ result }}
+      no_log: true
 
 
-  - name: Debug message
-    debug: 
-      var: {{ result }}
+    - name: Debug message
+      debug: 
+        var: {{ result }}
 ```
 
 
@@ -261,25 +261,25 @@ Example Playbook
     
   tasks:
 
-  - name: credential retrieval advanced
-    cyberark_credential:
-      api_base_url: "https://components.cyberark.local"
-      validate_certs: yes
-      client_cert: /etc/pki/ca-trust/source/client.pem
-      client_key: /etc/pki/ca-trust/source/priv-key.pem
-      app_id: "TestID"
-      query: "Safe=test;UserName=admin"
-      connection_timeout: 60
-      query_format: Exact
-      fail_request_on_password_change: True
-      reason: "requesting credential for Ansible deployment"
-    register: {{ result }}
-    no_log: true
+    - name: credential retrieval advanced
+      cyberark_credential:
+        api_base_url: "https://components.cyberark.local"
+        validate_certs: yes
+        client_cert: /etc/pki/ca-trust/source/client.pem
+        client_key: /etc/pki/ca-trust/source/priv-key.pem
+        app_id: "TestID"
+        query: "Safe=test;UserName=admin"
+        connection_timeout: 60
+        query_format: Exact
+        fail_request_on_password_change: True
+        reason: "requesting credential for Ansible deployment"
+      register: {{ result }}
+      no_log: true
 
 
-  - name: Debug message
-    debug: 
-      var: {{ result }}
+    - name: Debug message
+      debug: 
+        var: {{ result }}
 ```
 
 License
