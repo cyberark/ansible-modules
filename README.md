@@ -21,7 +21,7 @@ Provided Modules
 - **cyberark_user**: Module for CyberArk User Management using Privileged Account Security Web Services SDK
 - **cyberark_credential**: Module for CyberArk credential retrieval using Cyberark Central Credential Provider. 
  
-**NOTE**: For access to the cyberark_credential functionality, the **library/cyberark_credential.py** file will need to be added to the Ansible modules directory of the Ansible server.
+**NOTE**: For access to the cyberark_credential functionality, the **library/cyberark_credential.py** file will need to be added to the Ansible modules directory of the Ansible server, e.g. **~/.ansible/plugins/modules/** or **/usr/share/ansible/plugins/modules/**
 
 
 Example Playbook
@@ -244,13 +244,13 @@ Example Playbook
         api_base_url: "http://10.10.0.1"
         app_id: "TestID"
         query: "Safe=test;UserName=admin"
-      register: {{ result }}
+      register: result
       no_log: true
 
 
     - name: Debug message
       debug: 
-        var: {{ result }}
+        var: result
 ```
 
 
