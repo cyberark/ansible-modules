@@ -183,7 +183,8 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.urls import open_url
 from ansible.module_utils.six.moves.urllib.error import HTTPError
 import json
-import urllib
+# Python3 split urllib into urllib.request, urllib.parse, and urllib.error
+import urllib.parse
 try:
     import httplib
 except ImportError:
@@ -210,10 +211,10 @@ def retrieveCredential(module):
     if "client_key" in module.params:
         client_key = module.params["client_key"]
 
-    end_point = "/AIMWebService/api/Accounts?AppId=%s&Query=%s&ConnectionTimeout=%s&QueryFormat=%s&FailRequestOnPasswordChange=%s" % (urllib.quote(app_id), urllib.quote(query), connection_timeout, query_format, fail_request_on_password_change)
+    end_point = "/AIMWebService/api/Accounts?AppId=%s&Query=%s&ConnectionTimeout=%s&QueryFormat=%s&FailRequestOnPasswordChange=%s" % (urllib.parse.quote(app_id), urllib.parse.quote(query), connection_timeout, query_format, fail_request_on_password_change)
     
     if "reason" in module.params and module.params["reason"] != None:
-        reason = urllib.quote(module.params["reason"])
+        reason = urllib.parse.quote(module.params["reason"])
         end_point = end_point + "&reason=%s" % reason
 
     result = None
