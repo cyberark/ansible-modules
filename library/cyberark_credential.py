@@ -3,6 +3,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
@@ -182,17 +183,20 @@ from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.urls import open_url
 from ansible.module_utils.six.moves.urllib.error import HTTPError
-import json
 import urllib
+import json
+from typing import Union, Dict, List
+
 try:
     import httplib
 except ImportError:
     # Python 3
     import http.client as httplib
 
+urllib_quote = urllib.parse.quote if not hasattr(urllib, "quote") else urllib.quote
+
 
 def retrieveCredential(module):
-
     # Getting parameters from module
 
     api_base_url = module.params["api_base_url"]
@@ -204,16 +208,17 @@ def retrieveCredential(module):
     fail_request_on_password_change = module.params["fail_request_on_password_change"]
     client_cert = None
     client_key = None
-    
+
     if "client_cert" in module.params:
         client_cert = module.params["client_cert"]
     if "client_key" in module.params:
         client_key = module.params["client_key"]
 
-    end_point = "/AIMWebService/api/Accounts?AppId=%s&Query=%s&ConnectionTimeout=%s&QueryFormat=%s&FailRequestOnPasswordChange=%s" % (urllib.quote(app_id), urllib.quote(query), connection_timeout, query_format, fail_request_on_password_change)
-    
+    end_point = "/AIMWebService/api/Accounts?AppId=%s&Query=%s&ConnectionTimeout=%s&QueryFormat=%s&FailRequestOnPasswordChange=%s" % (
+        urllib_quote(app_id), urllib_quote(query), connection_timeout, query_format, fail_request_on_password_change)
+
     if "reason" in module.params and module.params["reason"] != None:
-        reason = urllib.quote(module.params["reason"])
+        reason = urllib_quote(module.params["reason"])
         end_point = end_point + "&reason=%s" % reason
 
     result = None
@@ -229,19 +234,20 @@ def retrieveCredential(module):
             client_key=client_key)
 
     except (HTTPError, httplib.HTTPException) as http_exception:
-
+        error_body, error_message = get_exception_pair(http_exception)
         module.fail_json(
             msg=("Error while retrieving credential."
                  "Please validate parameters provided, and permissions for the application and provider in CyberArk."
-                 "\n*** end_point=%s%s\n ==> %s" % (api_base_url, end_point, to_text(http_exception))),
-            status_code=http_exception.code)
+                 "\n*** end_point=%s%s\n ==> %s.\nBody error message: %s" % (
+                     api_base_url, end_point, to_text(http_exception), error_message)),
+            status_code=http_exception.code, **error_body)
 
     except Exception as unknown_exception:
-
+        error_body, error_message = get_exception_pair(unknown_exception)
         module.fail_json(
             msg=("Unknown error while retrieving credential."
-                 "\n*** end_point=%s%s\n%s" % (api_base_url, end_point, to_text(unknown_exception))),
-            status_code=-1)
+                 "\n*** end_point=%s%s\n%s.\nBody error message: %s" % (
+                     api_base_url, end_point, to_text(unknown_exception), error_message)), status_code=-1, **error_body)
 
     if response.getcode() == 200:  # Success
 
@@ -249,19 +255,29 @@ def retrieveCredential(module):
         try:
             result = json.loads(response.read())
         except Exception as e:
+            error_body, error_message = get_exception_pair(e)
             module.fail_json(
-                msg="Error obtain cyberark credential result from http body\n%s" % (to_text(e)),
-                status_code=-1)
+                msg="Error obtain cyberark credential result from http body\n%s\nBody error message: %s" % (
+                    to_text(e), error_message), status_code=-1, **error_body)
 
         return (result, response.getcode())
 
     else:
         module.fail_json(
             msg="error in end_point=>" +
-            end_point)
+                end_point)
+
+
+def get_exception_pair(http_exception: HTTPError) -> List[Union[Dict[str, str], str]]:
+    error_msg_text = "ErrorMsg"
+    loaded_json = json.load(http_exception)
+    error_body = {"error_body_message": loaded_json}
+    if error_msg_text in loaded_json.keys():
+        return [error_body, error_body["error_body_message"][error_msg_text]]
+    return [error_body, "Unknown"]
+
 
 def main():
-
     fields = {
         "api_base_url": {"required": True, "type": "str"},
         "app_id": {"required": True, "type": "str"},
